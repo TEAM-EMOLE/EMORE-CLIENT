@@ -5,9 +5,9 @@
 -Refactor 의존성, 환경 변수, 빌드 관련 코드 업데이트
 
 ### 반영 브랜치
-ex) feature/기능/세부기능이름
-세부 기능 브랜치 merge 
-최종: feature/기능
+ex) feature/기능/세부기능이름 <br/>
+세부 기능 브랜치 merge <br/>
+최종: feature/기능 <br/>
 
 ex) feature/signup/pwdeset ⇒ ⇒ ⇒ feature/signup
 
