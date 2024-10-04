@@ -9,7 +9,7 @@ export default function RouterLayout() {
       <Routes>
         <Route path="/" element={<GlobalLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="letters" element={<LettersPage />} />
+          <Route path="/letters" element={<LettersPage />} />
         </Route>
       </Routes>
     </Router>

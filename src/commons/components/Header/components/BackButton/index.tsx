@@ -6,7 +6,7 @@ interface BackButtonProps {
 
 export default function BackButton({ onClick }: BackButtonProps) {
   return (
-    <button onClick={onClick} className="absolute top-1/2 left-[28px] -translate-y-1/2">
+    <button onClick={onClick} className="absolute -translate-y-1/2 top-1/2 left-5">
       <BackIcon />
     </button>
   );
