@@ -1,11 +1,16 @@
 import Header from '../../commons/components/Header';
+import MainBox from './components/MainBox';
+import ReceiveLetter from './components/ReceiveLetter';
+import SendLetter from './components/SendLetter';
 
 export default function HomePage() {
   return (
     <>
       <Header title="HOME" />
-      <div className="flex items-center justify-center w-full h-full">
-        <div>메인페이지</div>
+      <div className="gap-3 flex flex-col justify-center items-center w-full h-[calc(100%-48px)]">
+        <MainBox />
+        <SendLetter />
+        <ReceiveLetter />
       </div>
     </>
   );
