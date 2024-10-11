@@ -3,6 +3,10 @@ import MainBox from './components/MainBox';
 import ReceiveLetter from './components/ReceiveLetter';
 import SendLetter from './components/SendLetter';
 
+/* 
+  메인 페이지
+*/
+
 export default function HomePage() {
   return (
     <>

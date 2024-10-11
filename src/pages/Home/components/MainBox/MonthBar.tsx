@@ -1,11 +1,14 @@
 import React from "react";
 
+/*
+    원하는 월을 선택할 수 있는 네비게이터
+*/ 
 interface MonthBarProps {
     month: number; 
     setMonth: React.Dispatch<React.SetStateAction<number>>; // 상태 업데이트 함수
   };
 
-const MonthBar: React.FC<MonthBarProps> = ({ month, setMonth}) => {
+const MonthBar: React.FC<MonthBarProps> = ({ month, setMonth }) => {
     const handleChangePrevMonth = () => {
         setMonth((prev: number) => (prev == 1 ? 12 : prev - 1)); 
     }
