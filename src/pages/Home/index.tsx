@@ -1,3 +1,4 @@
+import Footer from '../../commons/components/Footer';
 import Header from '../../commons/components/Header';
 import MainBox from './components/MainBox';
 import ReceiveLetter from './components/ReceiveLetter';
@@ -11,11 +12,12 @@ export default function HomePage() {
   return (
     <>
       <Header title="HOME" />
-      <div className="gap-3 flex flex-col justify-center items-center w-full h-[calc(100%-48px)]">
+      <div className="gap-3 flex flex-col justify-center items-center w-full h-[calc(100%-96px)]">
         <MainBox />
         <SendLetter />
         <ReceiveLetter />
       </div>
+      <Footer />
     </>
   );
 }
