@@ -63,7 +63,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-[30px] p-4 text-center">
-            <p className="font-suit text-14 font-normal leading-[16.8px] tracking-[-0.01em]">
+            <p className="font-suit text-14 font-normal leading-[16.8px] tracking-[-0.01em] text-gray-600">
               비밀번호를 잊어 버리셨나요?
             </p>
           </div>
@@ -72,8 +72,8 @@ export default function LoginPage() {
           <LoginButton
             onClick={handleSubmit}
             disabled={!isFormClicked} // 폼이 클릭되었을 때만 활성화
-            className={`h-[50px] p-[15px_120px] gap-[10px] rounded-[12px] cursor text-gray-500
-              ${!isFormClicked ? 'bg-gray-200 opacity-50' : 'bg-gray-800 text-white'}`}
+            className={`h-[50px] p-[15px_120px] gap-[10px] rounded-[12px] cursor 
+              ${!isFormClicked ? 'bg-gray-200 opacity-50 text-gray-500' : 'bg-gray-800 text-white'}`}
           >
             로그인
           </LoginButton>
