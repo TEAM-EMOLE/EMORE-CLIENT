@@ -6,6 +6,7 @@ interface AuthInputComponentProps {
   type?: string;
   value: string;
   onChange: (value: string) => void;
+  onFocus?: () => void;
 }
 
 const AuthInputComponent: React.FC<AuthInputComponentProps> = ({
@@ -14,6 +15,7 @@ const AuthInputComponent: React.FC<AuthInputComponentProps> = ({
   type = 'text',
   value,
   onChange,
+  onFocus,
 }) => {
   return (
     <div className="space-y-[8px] h-[92px]">
@@ -25,7 +27,8 @@ const AuthInputComponent: React.FC<AuthInputComponentProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full h-[44px] px-2 py-2 border border-Gray-200 rounded-[10px] text-Gray-800 focus:outline-none focus:border-Gray-500"
+        onFocus={onFocus}
+        className="w-full h-[44px] px-2 py-2 border border-Gray-200 rounded-[12px] text-Gray-800 focus:outline-none focus:border-Gray-500"
       />
     </div>
   );
