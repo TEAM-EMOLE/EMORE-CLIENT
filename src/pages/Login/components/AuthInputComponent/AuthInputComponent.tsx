@@ -22,6 +22,7 @@ const AuthInputComponent: React.FC<AuthInputComponentProps> = ({
       <label className="space-y-[8px] font-[SUIT] text-14 font-medium leading-[19.6px] tracking-[-0.015em] text-left text-Gray-800">
         {label}
       </label>
+      
       <input
         type={type}
         placeholder={placeholder}
