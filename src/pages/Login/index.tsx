@@ -16,28 +16,27 @@ export default function LoginPage() {
       handleSubmit, // 로그인 제출 핸들러
     } = useLoginForm();
 
-    const [isFormClicked, setFormClicked] = useState(false); // 폼 클릭 상태
-    const formRef = useRef<HTMLDivElement>(null); // 폼 영역을 참조, 타입을 HTMLDivElement로 설정
+    // 상태 변수와 set 함수 정의
+    const [isFormValid, setFormValid] = useState(false); // 폼 유효성 상태
+    const formRef = useRef<HTMLDivElement>(null);
 
-    // 폼이 클릭되었을 때 상태 업데이트
-    const handleFocus = () => {
-      setFormClicked(true); // 폼 중 하나라도 클릭되면 버튼 활성화
+    // 이메일 형식 유효성 검사
+    const isEmailValid = (email: string) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
     };
-  
-    // 폼 외부를 클릭했을 때 버튼 비활성화
+
+    // 패스워드 유효성 검사 (영문, 숫자, 특문 중 2개 조합 8자 이상)
+    const isPasswordValid = (password: string) => {
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]|.*[!@#$%^&*]).{8,}$/;
+      return passwordRegex.test(password);
+    };
+
+    // 이메일 및 패스워드가 모두 유효한지 확인
     useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        // formRef.current가 유효하고 클릭한 요소가 formRef의 자식이 아닌 경우
-        if (formRef.current && !formRef.current.contains(event.target as Node)) {
-          setFormClicked(false); // 버튼 비활성화
-        }
-      };
-  
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, []);
+      setFormValid(isEmailValid(email) && isPasswordValid(password));
+    }, [email, password]);
+
 
     return (
       <>
@@ -50,7 +49,6 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={handleEmailChange}
-              onFocus={handleFocus}
             />
             <AuthInputComponent
               label="비밀번호"
@@ -58,7 +56,6 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              onFocus={handleFocus}
             />
           </div>
 
@@ -71,9 +68,9 @@ export default function LoginPage() {
           <div className="mt-[30px] p-4" ref={formRef}>
           <LoginButton
             onClick={handleSubmit}
-            disabled={!isFormClicked} // 폼이 클릭되었을 때만 활성화
+            disabled={!isFormValid} // 유효성 검사 통과 시에만 버튼 활성화
             className={`h-[50px] p-[15px_120px] gap-[10px] rounded-[12px] cursor 
-              ${!isFormClicked ? 'bg-gray-200 opacity-50 text-gray-500' : 'bg-gray-800 text-white'}`}
+              ${!isFormValid ? 'bg-gray-200 opacity-50 text-gray-500' : 'bg-gray-800 text-white'}`}
           >
             로그인
           </LoginButton>
