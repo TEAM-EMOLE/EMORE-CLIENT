@@ -5,7 +5,8 @@ import Button from '../../commons/components/Button/index';
 import KakaoLogin from './components/KakaoLogin';
 import GoogleLogin from './components/GoogleLogin';
 import { useLoginForm } from './hooks/useLoginForm';
-import { useState, useEffect, useRef } from 'react';
+import { useValidation } from './hooks/useValidation';
+import { useRef } from 'react';
 
 const LoginButton = Button;
 const SinupButton = Button;
@@ -19,39 +20,21 @@ export default function LoginPage() {
       handleSubmit, // 로그인 제출 핸들러
     } = useLoginForm();
 
-    // 상태 변수와 set 함수 정의
-    const [isFormValid, setFormValid] = useState(false); // 폼 유효성 상태
+    const isFormValid = useValidation(email, password); // 유효성 검사 훅 사용
     const formRef = useRef<HTMLDivElement>(null);
-
-    // 이메일 형식 유효성 검사
-    const isEmailValid = (email: string) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-
-    // 패스워드 유효성 검사 (영문, 숫자, 특문 중 2개 조합 8자 이상)
-    const isPasswordValid = (password: string) => {
-      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]|.*[!@#$%^&*]).{8,}$/;
-      return passwordRegex.test(password);
-    };
-
-    // 이메일 및 패스워드가 모두 유효한지 확인
-    useEffect(() => {
-      setFormValid(isEmailValid(email) && isPasswordValid(password));
-    }, [email, password]);
-
 
     return (
       <>
         <Header title="로그인" isBack />
         <Container>
-          <div className="mt-[60px] p-4 overflow-y-auto ">
+          <div className="mt-[60px] p-4 overflow-y-auto">
             <AuthInputComponent
               label="이메일"
               placeholder="example@gmail.com"
               type="email"
               value={email}
               onChange={handleEmailChange}
+              className="text-sm placeholder:text-sm"
             />
             <AuthInputComponent
               label="비밀번호"
@@ -59,6 +42,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={handlePasswordChange}
+              className="text-sm placeholder:text-sm"
             />
           </div>
 

@@ -6,6 +6,7 @@ interface AuthInputComponentProps {
   type?: string;
   value: string;
   onChange: (value: string) => void;
+  className?: string;
   onFocus?: () => void;
 }
 
