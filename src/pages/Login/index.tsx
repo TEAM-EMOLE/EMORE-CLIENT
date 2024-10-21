@@ -60,7 +60,7 @@ export default function LoginPage() {
                 onClick={password ? togglePasswordVisibility : undefined} // 입력 시에만 클릭 가능
                 className={password ? 'cursor-pointer' : 'cursor-default'}
               >
-                {isPasswordVisible ? <PwdOpen /> : <PwdHide />} {/* Hide가 기본 상태 */}
+                {password ? <PwdOpen /> : <PwdHide />}
               </div>
             }
             />
