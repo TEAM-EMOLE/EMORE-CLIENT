@@ -50,14 +50,17 @@ export default function LoginPage() {
             placeholder="영문, 숫자, 특문 중 2개 조합 8자 이상"
             type={isPasswordVisible ? 'text' : 'password'} // 비밀번호 표시/숨기기
             value={password}
-            onChange={handlePasswordChange}
+            onChange={(value) => {
+              handlePasswordChange(value);
+              if (!value) setPasswordVisible(false); // 입력 값이 없으면 hide로 변경
+            }}
             className="text-sm placeholder:text-sm"
             icon={
               <div
                 onClick={password ? togglePasswordVisibility : undefined} // 입력 시에만 클릭 가능
                 className={password ? 'cursor-pointer' : 'cursor-default'}
               >
-                {isPasswordVisible ? <PwdOpen /> : <PwdHide />} {/* 항상 Hide가 기본 */}
+                {isPasswordVisible ? <PwdOpen /> : <PwdHide />} {/* Hide가 기본 상태 */}
               </div>
             }
             />
