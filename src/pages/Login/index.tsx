@@ -45,23 +45,24 @@ export default function LoginPage() {
               onChange={handleEmailChange}
               className="text-sm placeholder:text-sm"
             />
-            <AuthInputComponent
-              label="비밀번호"
-              placeholder="영문, 숫자, 특문 중 2개 조합 8자 이상"
-              type={isPasswordVisible ? 'text' : 'password'}
-              value={password}
-              onChange={handlePasswordChange}
-              className="text-sm placeholder:text-sm"
-              icon={
-                <div
-                  onClick={togglePasswordVisibility}
-                  className={password ? 'cursor-pointer' : 'cursor-default'}
-                >
-                  {password ? <PwdOpen /> : <PwdHide />}
-                </div>
-              }
+          <AuthInputComponent
+            label="비밀번호"
+            placeholder="영문, 숫자, 특문 중 2개 조합 8자 이상"
+            type={isPasswordVisible ? 'text' : 'password'} // 비밀번호 표시/숨기기
+            value={password}
+            onChange={handlePasswordChange}
+            className="text-sm placeholder:text-sm"
+            icon={
+              <div
+                onClick={password ? togglePasswordVisibility : undefined} // 입력 시에만 클릭 가능
+                className={password ? 'cursor-pointer' : 'cursor-default'}
+              >
+                {isPasswordVisible ? <PwdOpen /> : <PwdHide />} {/* 항상 Hide가 기본 */}
+              </div>
+            }
             />
           </div>
+  
 
           {/* 비밀번호 찾기 버튼 */}
           <div className="mt-[30px] p-4 text-center">
