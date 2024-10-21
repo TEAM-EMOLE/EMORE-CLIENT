@@ -2,11 +2,13 @@ import Header from '../../commons/components/Header';
 import Container from '../../commons/components/layout/Container';
 import AuthInputComponent from './components/AuthInputComponent/AuthInputComponent';
 import Button from '../../commons/components/Button/index';
+import PwdHide from './components/Icon/PwdHide';
+import PwdOpen from './components/Icon/PwdOpen';
 import KakaoLogin from './components/KakaoLogin';
 import GoogleLogin from './components/GoogleLogin';
 import { useLoginForm } from './hooks/useLoginForm';
 import { useValidation } from './hooks/useValidation';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const LoginButton = Button;
 const SinupButton = Button;
@@ -22,6 +24,13 @@ export default function LoginPage() {
 
     const isFormValid = useValidation(email, password); // 유효성 검사 훅 사용
     const formRef = useRef<HTMLDivElement>(null);
+    const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+    // 비밀번호 표시/숨기기 토글 함수
+    const togglePasswordVisibility = () => {
+      if (password) setPasswordVisible((prev) => !prev);
+    };
+
 
     return (
       <>
@@ -39,20 +48,29 @@ export default function LoginPage() {
             <AuthInputComponent
               label="비밀번호"
               placeholder="영문, 숫자, 특문 중 2개 조합 8자 이상"
-              type="password"
+              type={isPasswordVisible ? 'text' : 'password'}
               value={password}
               onChange={handlePasswordChange}
               className="text-sm placeholder:text-sm"
+              icon={
+                <div
+                  onClick={togglePasswordVisibility}
+                  className={password ? 'cursor-pointer' : 'cursor-default'}
+                >
+                  {password ? <PwdOpen /> : <PwdHide />}
+                </div>
+              }
             />
           </div>
 
+          {/* 비밀번호 찾기 버튼 */}
           <div className="mt-[30px] p-4 text-center">
             <p className="font-suit text-14 font-normal leading-[16.8px] tracking-[-0.01em] text-gray-600">
               비밀번호를 잊어 버리셨나요?
             </p>
           </div>
 
-          {/* 로그인 버튼 */}
+            
           <div className="mt-[30px] p-4 space-y-[10px]" ref={formRef}>
           <LoginButton
             onClick={handleSubmit}
