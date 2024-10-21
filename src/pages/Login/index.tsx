@@ -9,9 +9,9 @@ import GoogleLogin from './components/GoogleLogin';
 import { useLoginForm } from './hooks/useLoginForm';
 import { useValidation } from './hooks/useValidation';
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LoginButton = Button;
-const SinupButton = Button;
 
 export default function LoginPage() {
     const {
@@ -25,12 +25,24 @@ export default function LoginPage() {
     const isFormValid = useValidation(email, password); // 유효성 검사 훅 사용
     const formRef = useRef<HTMLDivElement>(null);
     const [isPasswordVisible, setPasswordVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const navigate = useNavigate();
+
 
     // 비밀번호 표시/숨기기 토글 함수
     const togglePasswordVisibility = () => {
       if (password) setPasswordVisible((prev) => !prev);
     };
 
+    const handleLoginSubmit = async () => {
+      setErrorMessage(null); // 이전 오류 메시지 초기화
+      try {
+        await handleSubmit(); // 로그인 처리
+        navigate('/dashboard'); // 로그인 성공 시 대시보드로 리다이렉트
+      } catch (error) {
+        setErrorMessage('로그인 실패. 이메일과 비밀번호를 확인하세요.'); // 오류 메시지 설정
+      }
+    };
 
     return (
       <>
@@ -69,15 +81,20 @@ export default function LoginPage() {
 
           {/* 비밀번호 찾기 버튼 */}
           <div className="mt-[30px] p-4 text-center">
-            <p className="font-suit text-14 font-normal leading-[16.8px] tracking-[-0.01em] text-gray-600">
-              비밀번호를 잊어 버리셨나요?
-            </p>
+            <div className="font-suit text-14 font-normal leading-[16.8px] tracking-[-0.01em] text-gray-600">
+              비밀번호를 잊어 버리셨나요? 
+              <span>비밀번호 찾기</span>
+            </div>
           </div>
 
             
           <div className="mt-[30px] p-4 space-y-[10px]" ref={formRef}>
+          {errorMessage && (
+              <div className="text-red-500 text-center">{errorMessage}</div> // 에러 메시지 표시
+            )}
+            
           <LoginButton
-            onClick={handleSubmit}
+            onClick={handleLoginSubmit}
             disabled={!isFormValid} // 유효성 검사 통과 시에만 버튼 활성화
             className={`h-[50px] p-[15px_120px] gap-[10px] rounded-[12px] cursor 
               ${!isFormValid ? 'bg-gray-200 opacity-50 text-gray-500' : 'bg-gray-800 text-white'}`}
@@ -85,14 +102,13 @@ export default function LoginPage() {
             로그인
           </LoginButton>
 
-          {/* 회원가입 버튼 */}
-            <SinupButton 
-              onClick={handleSubmit}
+            <LoginButton 
+              onClick={() => navigate('/signup')} // 회원가입 페이지로 이동
               className={"h-[50px] p-[15px_120px] gap-[10px] rounded-[12px] cursor bg-gray-800 text-white"}
-            
             >
+
             이메일로 회원가입
-            </SinupButton> 
+            </LoginButton> 
           </div>
 
           {/* 간편 로그인 */}
@@ -106,6 +122,7 @@ export default function LoginPage() {
           <KakaoLogin />
           <GoogleLogin />
           </div>
+          
         </Container>
       </>
     );
