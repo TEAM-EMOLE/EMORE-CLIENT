@@ -14,7 +14,7 @@ export default function Header({ title, isBack, service, isMenu, serviceClick }:
   const goBack = useGoBack();
 
   return (
-    <div className="w-full h-[48px] flex justify-center items-center relative border-b border-[rgba(249, 249, 249, 0.8)]">
+    <div className="w-full h-headerHeigth flex justify-center items-center relative border-b border-[rgba(249, 249, 249, 0.8)]">
       {isBack && <BackButton onClick={goBack} />}
       {title}
       {(service || isMenu) && (
