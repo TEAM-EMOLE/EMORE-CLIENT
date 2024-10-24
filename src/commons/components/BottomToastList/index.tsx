@@ -46,7 +46,7 @@ function Toast({ id, children, time = 3 }: ToastType) {
       case 'NEW':
         return '!translate-x-0';
       case 'DISAPEAR':
-        return '!translate-x-[200%]';
+        return '!translate-x-[150vh]';
       default:
         return '';
     }
@@ -60,7 +60,7 @@ function Toast({ id, children, time = 3 }: ToastType) {
   return (
     <div
       className={`
-        bg-Gray-800 opacity-80 text-white m-4 p-4 rounded-lg shadow-sm transition-transform duration-500 translate-x-[200%] ${getPosition(
+        bg-Gray-800 opacity-80 text-white m-4 p-4 rounded-lg shadow-sm transition-transform duration-500 translate-x-[150vh] ${getPosition(
           position
         )}`}
     >
