@@ -1,9 +1,7 @@
 import AutoResizeTextArea from '../../commons/components/AutoResizeTextArea';
 import Header from '../../commons/components/Header';
 import WriteFeatureHeader from './components/WriteFeatureHeader';
-import useWriteLetter from './hooks/useWriteLetter';
-
-const TEXT_LIMIT = 1000;
+import useWriteLetter, { TEXT_LIMIT } from './hooks/useWriteLetter';
 
 export default function LetterWritePage() {
   const {
