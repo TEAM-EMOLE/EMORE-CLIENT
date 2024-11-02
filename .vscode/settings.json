@@ -71,6 +71,12 @@
       "code": ":heavy_minus_sign:",
       "description": "파일 삭제"
     }
+  ],
+  "cSpell.words": [
+    "emole",
+    "tailwindcss",
+    "tanstack",
+    "zustand"
   ]
 }
   
