@@ -69,7 +69,7 @@ export default function LoginPage() {
               </LoginButton>
               <SignupButton
                 onClick={handleSubmit}
-                className="w-full h-12 bg-white text-black cursor-pointer border border-gray-300"
+                className="w-full h-12 bg-white !text-black cursor-pointer border border-gray-300"
               >
                 이메일로 회원가입
               </SignupButton>
