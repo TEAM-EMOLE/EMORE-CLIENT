@@ -63,13 +63,13 @@ export default function LoginPage() {
             <div className="space-y-4" ref={formRef}>
               <LoginButton
                 onClick={handleSubmit}
-                className="w-full h-12 rounded-lg bg-gray-800 text-white cursor-pointer"
+                className="w-full h-12 rounded-[12px] bg-gray-800 text-white cursor-pointer"
               >
                 로그인
               </LoginButton>
               <SignupButton
                 onClick={handleSubmit}
-                className="w-full h-12 rounded-lg bg-gray-800 text-white cursor-pointer"
+                className="w-full h-12 rounded-[12px] bg-white text-black cursor-pointer border border-gray-300"
               >
                 이메일로 회원가입
               </SignupButton>
