@@ -14,43 +14,42 @@ function BottomToastList() {
   return (
     <div className="fixed z-popup bottom-0 w-full max-w-[600px]">
       {toasts.map((props) => (
-        <Toast key={props.id} id={props.id}>
-          {props.children}
-        </Toast>
+        <Toast key={props.id} {...props} />
       ))}
     </div>
   );
 }
 
-function Toast({ id, children, time = 3 }: ToastType) {
-  const [position, setPosition] = useState<'HIDDEN' | 'NEW' | 'DISAPEAR'>('HIDDEN');
+enum ToastTiming {
+  NEW = 'NEW',
+  HIDDEN = 'HIDDEN',
+  DISAPPEAR = 'DISAPPEAR',
+}
+
+const ToastPosition = {
+  [ToastTiming.HIDDEN]: '',
+  [ToastTiming.NEW]: '!translate-x-0',
+  [ToastTiming.DISAPPEAR]: '!translate-x-[150vh]',
+} as const;
+
+function Toast({ id, children, containerClassName, time = 3 }: ToastType) {
+  const [position, setPosition] = useState<ToastTiming>(ToastTiming.HIDDEN);
   const removeToast = useStore(useBottomToastStore, (state) => state.removeToast);
 
   const init = useCallback(
     async (id: string) => {
       if (!removeToast || !time) return;
       await delay(0.1);
-      setPosition('NEW');
+      setPosition(ToastTiming.NEW);
 
       await delay(time);
-      setPosition('DISAPEAR');
+      setPosition(ToastTiming.DISAPPEAR);
 
       await delay(0.5);
       removeToast(id);
     },
     [removeToast, time]
   );
-
-  function getPosition(ps: typeof position) {
-    switch (ps) {
-      case 'NEW':
-        return '!translate-x-0';
-      case 'DISAPEAR':
-        return '!translate-x-[150vh]';
-      default:
-        return '';
-    }
-  }
 
   useEffect(() => {
     if (!id || !init) return;
@@ -60,9 +59,7 @@ function Toast({ id, children, time = 3 }: ToastType) {
   return (
     <div
       className={`
-        bg-Gray-800 opacity-80 text-white m-4 p-4 rounded-lg shadow-sm transition-transform duration-500 translate-x-[150vh] ${getPosition(
-          position
-        )}`}
+        bg-Gray-800 opacity-80 text-white m-4 p-4 rounded-lg shadow-sm transition-transform duration-500 translate-x-[150vh] ${containerClassName} ${ToastPosition[position]}`}
     >
       {children}
     </div>
