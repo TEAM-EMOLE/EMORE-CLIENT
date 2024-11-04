@@ -1,4 +1,4 @@
-import React, { ReactElement, useLayoutEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 /** AutoResizeTextArea 컴포넌트
  * 생성 날짜: 2024-10-24
@@ -6,33 +6,55 @@ import React, { ReactElement, useLayoutEffect, useRef } from 'react';
  * 설명: 길이가 긴 텍스트를 입력할 때 자동으로 높이가 늘어나는 텍스트 에어리어 컴포넌트
  * 상황: 길이가 긴 텍스트를 입력할 때 사용자가 텍스트 에어리어의 높이를 조절할 필요 없이 자동으로 높이가 늘어나는 기능이 필요할 때 사용
  */
-function AutoResizeTextArea({
-  rows = 1,
-  ...props
-}: Readonly<React.HTMLProps<HTMLTextAreaElement>>): ReactElement {
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+import { useCallback, useEffect } from 'react';
 
-  useLayoutEffect(() => {
-    if (!textAreaRef.current) return;
+const AutoResizeTextArea = React.forwardRef<
+  HTMLTextAreaElement,
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>(function AutoResizeTextArea(
+  { className, ...props }, //
+  ref?
+) {
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const tempRef = useRef<HTMLDivElement>(null);
 
-    const cloneNode = textAreaRef.current.cloneNode(true) as HTMLTextAreaElement;
+  const setRef = useCallback(
+    (el: HTMLTextAreaElement | null) => {
+      if (typeof ref === 'function') {
+        ref(el);
+      } else if (ref) {
+        ref.current = el;
+      }
+      textAreaRef.current = el;
+    },
+    [ref]
+  );
 
-    (textAreaRef.current as Node).parentNode!.appendChild(cloneNode);
+  useEffect(() => {
+    const textArea = textAreaRef.current;
+    const temp = tempRef.current;
+    if (!textArea || !temp) return;
 
-    cloneNode.style.height = 'auto';
-    textAreaRef.current.style.height = `${cloneNode.scrollHeight}px`;
+    const resize = () => {
+      temp.style.height = textArea.style.height;
 
-    (textAreaRef.current as Node).parentNode!.removeChild(cloneNode);
-  }, [textAreaRef.current?.value]);
+      textArea.style.height = 'auto';
+      textArea.style.height = textArea.scrollHeight + 'px';
+
+      temp.style.height = '0px';
+    };
+
+    textArea.addEventListener('input', resize);
+
+    return () => textArea.removeEventListener('input', resize);
+  }, []);
 
   return (
-    <textarea
-      rows={rows}
-      ref={textAreaRef}
-      {...props}
-      style={{ overflow: 'hidden', resize: 'none' }}
-    />
+    <>
+      <textarea className={`overflow-hidden resize-none ${className}`} {...props} ref={setRef} />
+      <div ref={tempRef} />
+    </>
   );
-}
+});
 
-export default React.memo(AutoResizeTextArea);
+export default AutoResizeTextArea;
