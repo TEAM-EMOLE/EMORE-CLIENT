@@ -4,14 +4,13 @@ import { create } from 'zustand';
 export interface ToastType {
   id: string;
   children: React.ReactNode;
+  containerClassName?: string;
   time?: number;
 }
 
 interface BottomToastStore {
   toasts: ToastType[];
-  // eslint-disable-next-line no-unused-vars
   addToast: (toast: Omit<ToastType, 'id'>) => void;
-  // eslint-disable-next-line no-unused-vars
   removeToast: (id: string) => void;
 }
 
