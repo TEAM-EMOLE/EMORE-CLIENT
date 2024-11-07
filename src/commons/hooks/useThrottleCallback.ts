@@ -1,29 +1,30 @@
-import { DependencyList, useCallback, useEffect, useRef, useState } from 'react';
-import useThrottle from './useThrottle';
+/* eslint-disable react-hooks/exhaustive-deps */
+import _ from 'lodash';
+import { DependencyList, useCallback, useEffect, useRef } from 'react';
 
-function useThrottleCallback<T extends (...args: unknown[]) => unknown>(
+export default function useThrottleCallback<T extends (...args: any[]) => any>(
   callback: T,
   limit: number,
   deps: DependencyList
 ): T {
-  const [active, setActive] = useState(0);
-  const throttledActive = useThrottle(active, limit);
-
-  const argsRef = useRef<unknown>(null);
-  const func = useCallback(callback, [callback, deps]);
-
-  const throttledFunc = (...args: unknown[]) => {
-    argsRef.current = args;
-    setActive((prev) => prev + 1);
-  };
+  const callbackRef = useRef<T>(callback);
 
   useEffect(() => {
-    if (throttledActive === 0) return;
-    func(argsRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [throttledActive]);
+    callbackRef.current = callback;
+  }, [callback, ...deps]);
 
-  return throttledFunc as T;
+  const throttledCallback = useCallback(
+    _.throttle((...args: Parameters<T>) => {
+      callbackRef.current(...args);
+    }, limit),
+    [limit]
+  );
+
+  useEffect(() => {
+    return () => {
+      throttledCallback.cancel();
+    };
+  }, [throttledCallback]);
+
+  return throttledCallback as unknown as T;
 }
-
-export default useThrottleCallback;

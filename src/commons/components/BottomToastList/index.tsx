@@ -39,7 +39,7 @@ function Toast({ id, children, containerClassName, time = 3 }: ToastType) {
   const init = useCallback(
     async (id: string) => {
       if (!removeToast || !time) return;
-      await delay(0.1);
+      await delay(0);
       setPosition(ToastTiming.NEW);
 
       await delay(time);
