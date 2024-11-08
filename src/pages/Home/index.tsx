@@ -17,7 +17,7 @@ export default function HomePage() {
         <SendLetter />
         <ReceiveLetter />
       </div>
-      <Footer />
+      <Footer isHome={true} />
     </>
   );
 }
