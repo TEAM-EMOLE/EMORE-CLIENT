@@ -18,16 +18,12 @@ export default function Footer({ isHome, isFriend }: FooterProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-[48px] flex justify-evenly items-center relative border-b border-[rgba(249, 249, 249, 0.8)]">
+    <div className="w-full h-[48px] flex justify-evenly items-center relative border-t border-[rgba(249, 249, 249, 0.8)]">
       <Button
         isDisabled={isHome}
         text="홈"
         onClick={() => navigate('/')}
       />
-      {/* <button
-        className="w-10 h-10 bg-black flex justify-center items-center rounded-full"
-        onClick={() => navigate('/letter/write')}
-      /> */}
       <WriteButton onClick={() => navigate('/letter/write')} />
       <Button
         isDisabled={isFriend}
