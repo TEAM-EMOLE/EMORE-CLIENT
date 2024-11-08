@@ -16,7 +16,7 @@ const MonthBar: React.FC<MonthBarProps> = ({ month, setMonth }) => {
         setMonth((prev: number) => (prev == 12 ? 1 : prev + 1));
     }
     return (
-        <div className="w-3/5 h-1/5 my-5 flex justify-center items-center gap-x-2 border-2">
+        <div className="w-3/5 h-16 mt-5 flex justify-center items-center gap-x-2 border-2">
             <button onClick={handleChangePrevMonth}>(</button>
             <p className="w-3/5 text-center">{month}월의 감정 그래프</p>
             <button onClick={handleChangeNextMonth}>)</button>
