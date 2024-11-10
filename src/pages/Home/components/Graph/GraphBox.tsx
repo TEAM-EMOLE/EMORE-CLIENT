@@ -1,4 +1,3 @@
-
 export default function GraphBox() {
-  return <div>GraphBox</div>
+  return <div>GraphBox</div>;
 }
