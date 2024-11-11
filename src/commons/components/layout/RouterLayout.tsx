@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GlobalLayout from './GlobalLayout';
 import HomePage from '../../../pages/Home';
-import LoginPage from '../../../pages/Login';
+import LoginPage from '../../../pages/Auth/Login';
 import LettersPage from '../../../pages/Letters';
 import LetterWritePage from '../../../pages/LetterWrite';
 import GraphT from '../../../pages/GraphT';
