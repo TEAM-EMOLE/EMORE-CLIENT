@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "preview": "vite preview",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,scss,md}'",
     "prepare": "echo 'init husky' && husky"
