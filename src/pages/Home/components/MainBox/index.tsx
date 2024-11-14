@@ -13,7 +13,7 @@ export default function MainBox() {
   let countLetter = 1; // 추후 서버에서 받은 편지 개수로 바뀔 예정
 
   return (
-    <div className="w-11/12 h-3/5 flex flex-col justify-center items-center my-[10px] ㅡ border-2">
+    <div className="w-11/12 h-3/5 flex flex-col justify-center items-center my-[10px] border border-solid border-[#dbdde0] rounded-[20px] shadow-[0_4px_12px_#f7f7f7]">
       <MonthBar month={month} setMonth={setMonth} />
       <div className="w-4/5 h-4/5 my-5 flex justify-center items-center gap-x-2">
         {countLetter == 0 ? (
