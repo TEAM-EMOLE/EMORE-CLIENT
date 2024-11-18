@@ -1,8 +1,7 @@
-import axios, { InternalAxiosRequestConfig, isAxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse, isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
+// 타입 정의
 interface TokenResponse {
   data: {
     accessToken: string;
@@ -12,28 +11,64 @@ interface TokenResponse {
   code?: string;
 }
 
-const axiosIns = axios.create({
-  baseURL: apiUrl,
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
+
+// CookieAttributes 타입 정의
+interface CookieAttributes {
+  expires?: number | Date;
+  path?: string;
+  domain?: string;
+  secure?: boolean;
+  sameSite?: 'strict' | 'lax' | 'none';
+}
+
+// 상수 정의
+const API_CONFIG = {
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
-});
+} as const;
 
-// 액세스 토큰 가져오기
-const getAccessToken = () => localStorage.getItem('accessToken');
+const COOKIE_CONFIG: CookieAttributes = {
+  expires: 30,
+  secure: true,
+  sameSite: 'strict',
+  path: '/',
+} as const;
 
-// 로그아웃 처리 함수
+// 토큰 관리 유틸리티
+const TokenService = {
+  getAccessToken: () => localStorage.getItem('accessToken'),
+  setAccessToken: (token: string) => {
+    localStorage.setItem('accessToken', token);
+  },
+  getRefreshToken: () => Cookies.get('refreshToken'),
+  setRefreshToken: (token: string) => {
+    Cookies.set('refreshToken', token, COOKIE_CONFIG);
+  },
+  clearTokens: () => {
+    localStorage.removeItem('accessToken');
+    Cookies.remove('refreshToken', { path: '/' });
+  },
+};
+
+// axios 인스턴스 생성
+const axiosIns = axios.create(API_CONFIG);
+
+// 로그아웃 처리
 const handleLogout = () => {
-  localStorage.removeItem('accessToken');
-  Cookies.remove('refreshToken', { path: '/' });
+  TokenService.clearTokens();
   window.location.href = '/login';
 };
 
-// 리프레시 토큰으로 새 토큰 발급받기
-const refreshTokens = async () => {
+// 토큰 갱신
+const refreshTokens = async (): Promise<string | null> => {
   try {
-    const refreshToken = Cookies.get('refreshToken');
+    const refreshToken = TokenService.getRefreshToken();
     if (!refreshToken) {
       handleLogout();
       throw new Error('No refresh token');
@@ -51,21 +86,16 @@ const refreshTokens = async () => {
 
     if (response.status === 200 && response.data.data) {
       const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-      localStorage.setItem('accessToken', accessToken);
-      Cookies.set('refreshToken', newRefreshToken, {
-        expires: 30,
-        secure: true,
-        sameSite: 'strict',
-        path: '/',
-      });
-
+      TokenService.setAccessToken(accessToken);
+      TokenService.setRefreshToken(newRefreshToken);
       return accessToken;
     }
     handleLogout();
     return null;
   } catch (error) {
-    if (isAxiosError<TokenResponse>(error)) {
-      if (error.response?.data?.message === 'refresh token expired') {
+    if (isAxiosError(error) && error.response?.data) {
+      const errorData = error.response.data as { message?: string };
+      if (errorData.message === 'refresh token expired') {
         handleLogout();
       }
     }
@@ -75,23 +105,22 @@ const refreshTokens = async () => {
 
 // 요청 인터셉터
 axiosIns.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = getAccessToken();
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const token = TokenService.getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error)
 );
 
 // 응답 인터셉터
 axiosIns.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+  (response: AxiosResponse) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as CustomAxiosRequestConfig;
 
-    // 401 에러이고 재시도하지 않은 요청인 경우
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
@@ -109,9 +138,9 @@ axiosIns.interceptors.response.use(
       }
     }
 
-    // 기타 에러 처리
-    if (isAxiosError(error)) {
-      console.error('API Error:', error.response?.data?.message || error.message);
+    if (isAxiosError(error) && error.response?.data) {
+      const errorData = error.response.data as { message?: string };
+      console.error('API Error:', errorData.message || error.message);
     }
 
     return Promise.reject(error);
