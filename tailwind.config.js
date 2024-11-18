@@ -51,8 +51,8 @@ module.exports = {
       },
 
       spacing: {
-        headerHeigth: '48px'
-      }
+        headerHeigth: '48px',
+      },
     },
   },
   plugins: [require('tailwind-scrollbar-hide')],
