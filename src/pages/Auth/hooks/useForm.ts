@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import api from '../../../commons/api/axiosInstance';
 import { AxiosError } from 'axios';
 import { useBottomToastStore } from '../../../commons/components/BottomToastList/stores/useBottomToastStore';
-
+import { useNavigate } from 'react-router-dom';
+import api from '../../../commons/api/axiosInstance';
 interface ErrorResponse {
   message?: string;
   code?: string;
   data?: {
     grantType?: string;
     accessToken?: string;
+    refreshToken?: string;
   };
 }
 
 export function useLoginForm() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
@@ -54,15 +56,10 @@ export function useLoginForm() {
 
     try {
       const response = await api.post('/api/users/login', { email, password });
-      console.log('응답:', response);
 
       if (response.status === 200) {
-        const { data } = response.data;
-        localStorage.setItem('accessToken', data.accessToken);
-
-        // 예시 처리 (추후 수정)
         addToast({ children: '로그인에 성공했습니다.' });
-        // 추가적인 처리 필요
+        navigate('/home');
       }
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
