@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../../commons/components/Header';
 import Container from '../../../commons/components/layout/Container';
@@ -8,7 +7,7 @@ import PwdHide from '../components/icon/PwdHide';
 import PwdOpen from '../components/icon/PwdOpen';
 import Google from '../components/AuthSocial/Google';
 import Kakao from '../components/AuthSocial/Kakao';
-import { useLoginForm } from '../hooks/useForm';
+import { useLoginForm } from '../hooks/useLoginForm';
 
 const LoginButton = Button;
 const SignupButton = Button;
@@ -16,23 +15,13 @@ const SignupButton = Button;
 export default function LoginPage() {
   const navigate = useNavigate();
   const {
-    email,
-    password,
-    handleEmailChange,
-    handlePasswordChange,
+    register,
     handleSubmit,
-    emailError,
-    passwordError,
+    errors,
+    isPasswordVisible,
+    togglePasswordVisibility,
+    handleFocusError,
   } = useLoginForm();
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible((prev) => !prev);
-  };
-
-  const onLoginClick = async () => {
-    await handleSubmit();
-  };
 
   const onSignupClick = () => {
     navigate('/signup');
@@ -42,25 +31,35 @@ export default function LoginPage() {
     <>
       <Header title="로그인" isBack />
       <Container>
-        <div className="w-full mx-auto space-y-8 overflow-y-auto">
-          {/* 이메일 및 비밀번호 입력 */}
+        <form onSubmit={handleSubmit} className="w-full mx-auto space-y-8">
           <div className="mt-16 space-y-6">
             <AuthInput
               label="이메일"
               placeholder="example@gmail.com"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              error={emailError}
+              error={!!errors.email}
+              {...register('email', {
+                required: '이메일을 입력해주세요.',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: '올바른 이메일 형식이 아닙니다.',
+                },
+              })}
+              onFocus={() => handleFocusError(errors.email)}
             />
+
             <AuthInput
               label="비밀번호"
               placeholder="영문, 숫자, 특문 중 2개 조합 8자 이상"
               type={isPasswordVisible ? 'text' : 'password'}
-              value={password}
-              onChange={handlePasswordChange}
-              className="text-sm placeholder:text-sm w-full"
-              error={passwordError}
+              error={!!errors.password}
+              {...register('password', {
+                required: '비밀번호를 입력해주세요.',
+                minLength: {
+                  value: 8,
+                  message: '비밀번호는 8자 이상이어야 합니다.',
+                },
+              })}
+              onFocus={() => handleFocusError(errors.password)}
               icon={
                 <div
                   role="button"
@@ -89,7 +88,7 @@ export default function LoginPage() {
           {/* 로그인 및 회원가입 버튼 */}
           <div className="space-y-4">
             <LoginButton
-              onClick={onLoginClick}
+              type="submit"
               className="w-full h-12 bg-gray-800 text-white cursor-pointer"
             >
               로그인
@@ -115,7 +114,7 @@ export default function LoginPage() {
             <Kakao />
             <Google />
           </div>
-        </div>
+        </form>
       </Container>
     </>
   );

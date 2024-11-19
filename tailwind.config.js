@@ -15,9 +15,9 @@ module.exports = {
       },
 
       colors: {
-        Accent: '#3E85FF',
-        Positive: '#3BD42D',
-        Error: '#EA4335',
+        accent: '#3E85FF',
+        positive: '#3BD42D',
+        error: '#EA4335',
 
         Gray: {
           0: '#fff',

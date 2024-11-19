@@ -147,4 +147,4 @@ axiosIns.interceptors.response.use(
   }
 );
 
-export default axiosIns;
+export { TokenService, axiosIns as default };
