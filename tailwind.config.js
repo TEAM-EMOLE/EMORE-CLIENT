@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -15,9 +15,9 @@ module.exports = {
       },
 
       colors: {
-        Accent: '#3E85FF',
-        Positive: '#3BD42D',
-        Error: '#EA4335',
+        accent: '#3E85FF',
+        positive: '#3BD42D',
+        error: '#EA4335',
 
         Gray: {
           0: '#fff',
@@ -51,9 +51,8 @@ module.exports = {
       },
 
       spacing: {
-        headerHeigth: '48px'
-      }
+        headerHeigth: '48px',
+      },
     },
   },
-  plugins: [require('tailwind-scrollbar-hide')],
 };
