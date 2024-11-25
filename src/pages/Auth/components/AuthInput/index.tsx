@@ -16,9 +16,9 @@ const AuthInputComponent = React.forwardRef<HTMLInputElement, AuthInputComponent
         <div className="relative w-full">
           <input
             ref={ref}
-            className={`w-full h-[44px] px-2 py-2 border ${
-              error ? 'focus:border-error' : 'border-gray-200'
-            } rounded-[12px] text-gray-800 focus:outline-none focus:border-gray-500 pr-10`}
+            className={`w-full h-[44px] px-2 py-2 border rounded-[12px] text-gray-800 focus:outline-none ${
+              error ? 'border-error focus:border-error' : 'border-gray-200 focus:border-gray-500'
+            } pr-10`}
             {...props}
           />
           {icon && (
@@ -32,7 +32,6 @@ const AuthInputComponent = React.forwardRef<HTMLInputElement, AuthInputComponent
   }
 );
 
-// displayName 추가
 AuthInputComponent.displayName = 'AuthInputComponent';
 
 export default AuthInputComponent;
