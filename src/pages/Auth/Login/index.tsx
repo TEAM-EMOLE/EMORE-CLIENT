@@ -15,7 +15,8 @@ const SignupButton = Button;
 export default function LoginPage() {
   const navigate = useNavigate();
   const {
-    register,
+    emailRegister,
+    passwordRegister,
     handleSubmit,
     errors,
     isPasswordVisible,
@@ -36,14 +37,8 @@ export default function LoginPage() {
             <AuthInput
               label="이메일"
               placeholder="example@gmail.com"
-              error={!!errors.email}
-              {...register('email', {
-                required: '이메일을 입력해주세요.',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: '올바른 이메일 형식이 아닙니다.',
-                },
-              })}
+              error={Boolean(errors?.email)}
+              {...emailRegister}
               onFocus={() => handleFocusError(errors.email)}
             />
 
@@ -51,14 +46,8 @@ export default function LoginPage() {
               label="비밀번호"
               placeholder="영문, 숫자, 특문 중 2개 조합 8자 이상"
               type={isPasswordVisible ? 'text' : 'password'}
-              error={!!errors.password}
-              {...register('password', {
-                required: '비밀번호를 입력해주세요.',
-                minLength: {
-                  value: 8,
-                  message: '비밀번호는 8자 이상이어야 합니다.',
-                },
-              })}
+              error={Boolean(errors?.password)}
+              {...passwordRegister}
               onFocus={() => handleFocusError(errors.password)}
               icon={
                 <div
@@ -80,7 +69,7 @@ export default function LoginPage() {
 
           {/* 비밀번호 찾기 */}
           <div className="text-center">
-            <p className="font-suit text-base leading-5 tracking-tight text-gray-600">
+            <p className="font-suit text-12 leading-5 tracking-tight text-gray-600">
               비밀번호를 잊어 버리셨나요?
             </p>
           </div>
